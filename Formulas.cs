@@ -89,7 +89,7 @@ namespace OpcodeTools
     {
         public override string ToString()
         {
-            return "0.4.1.0.13860 Mac";
+            return "4.1.0.13860 Mac";
         }
 
         protected override uint BaseOffset { get { return 1380; } }
@@ -132,7 +132,7 @@ namespace OpcodeTools
     {
         public override string ToString()
         {
-            return "0.4.1.0.13875 Windows";
+            return "4.1.0.13875 Windows";
         }
 
         protected override bool AuthCheck(uint opcode)
@@ -173,7 +173,7 @@ namespace OpcodeTools
     {
         public override string ToString()
         {
-            return "0.4.1.0.13875 Mac";
+            return "4.1.0.13875 Mac";
         }
 
         protected override uint BaseOffset { get { return 1380; } }
@@ -487,6 +487,46 @@ namespace OpcodeTools
         public override uint CalcAuthFromOpcode(uint opcode)
         {
             return (opcode & 2 | ((opcode & 0xC00 | (opcode >> 2) & 0x1000) >> 8)) >> 1;
+        }
+    }
+
+    public class Windows520 : FormulasBase
+    {
+        public override string ToString()
+        {
+            return "5.2.0.16650 Windows";
+        }
+
+        protected override uint BaseOffset { get { return 1360; } }
+
+        protected override bool AuthCheck(uint opcode)
+        {
+            return (opcode & 0x1FC8) == 3080;
+        }
+
+        protected override bool SpecialCheck(uint opcode)
+        {
+            return (opcode & 0x80A) == 0;
+        }
+
+        protected override bool NormalCheck(uint opcode)
+        {
+            return (opcode & 0x4A) == 2;
+        }
+
+        public override uint CalcCryptedFromOpcode(uint opcode)
+        {
+            return  opcode & 1 | ((opcode & 4 | ((opcode & 0x30 | (opcode >> 1) & 0x7FC0) >> 1)) >> 1);
+        }
+
+        public override uint CalcSpecialFromOpcode(uint opcode)
+        {
+            return opcode & 1 | ((opcode & 4 | ((opcode & 0x7F0 | (opcode >> 1) & 0x7800) >> 1)) >> 1);
+        }
+
+        public override uint CalcAuthFromOpcode(uint opcode)
+        {
+            return ((opcode & 0x30 | (opcode >> 7) & 0x1C0) >> 1) | opcode & 7;
         }
     }
 }
