@@ -490,6 +490,46 @@ namespace OpcodeTools
         }
     }
 
+    public class Windows505b : FormulasBase
+    {
+        public override string ToString()
+        {
+            return "5.0.5.b.16135 Windows";
+        }
+
+        protected override uint BaseOffset { get { return 340; } }
+
+        protected override bool AuthCheck(uint opcode)
+        {
+            return (opcode & 0xCBA) == 1058;
+        }
+
+        protected override bool SpecialCheck(uint opcode)
+        {
+            return (opcode & 0xA00) == 2560;
+        }
+
+        protected override bool NormalCheck(uint opcode)
+        {
+            return (opcode & 0xA00) == 2048;
+        }
+
+        public override uint CalcCryptedFromOpcode(uint opcode)
+        {
+            return opcode & 0x1FF | ((opcode & 0x400 | (opcode >> 1) & 0x7800) >> 1);
+        }
+
+        public override uint CalcSpecialFromOpcode(uint opcode)
+        {
+            return ((opcode & 0x400 | (opcode >> 1) & 0x7800) >> 1) | opcode & 0x1FF;
+        }
+
+        public override uint CalcAuthFromOpcode(uint opcode)
+        {
+            return ((opcode & 4 | ((opcode & 0x40 | ((opcode & 0x300 | (opcode >> 2) & 0x3C00) >> 1)) >> 3)) >> 1) | opcode & 1;
+        }
+    }
+
     public class Windows520 : FormulasBase
     {
         public override string ToString()
@@ -506,7 +546,11 @@ namespace OpcodeTools
 
         protected override bool SpecialCheck(uint opcode)
         {
-            return (opcode & 0x80A) == 0;
+            return (opcode & 0x80A) == 0 &&
+                (opcode & 0xA58) != 2120 &&
+                (opcode & 0x248) != 520 &&
+                (opcode & 0x90A) != 2304 &&
+                (opcode & 0x90A) != 2048;
         }
 
         protected override bool NormalCheck(uint opcode)

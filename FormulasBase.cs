@@ -3,12 +3,19 @@ namespace OpcodeTools
 {
     public abstract class FormulasBase
     {
+        // used in NetClient__ProcessMessage
         public abstract uint CalcCryptedFromOpcode(uint opcode);
+        // for switch in NetClient__JAMClientDispatch
         public abstract uint CalcSpecialFromOpcode(uint opcode);
+        // used in switch in NetClient__JAMClientConnectionDispatch
         public abstract uint CalcAuthFromOpcode(uint opcode);
+        // used in NetClient__ProcessMessage
         protected abstract bool NormalCheck(uint opcode);
+        // used in NetClient__ProcessMessage
         protected abstract bool SpecialCheck(uint opcode);
+        // in function with "WORLD OF WARCRAFT CONNECTION - SERVER TO CLIENT" string
         protected abstract bool AuthCheck(uint opcode);
+        // offset in NetClient__ProcessMessage
         protected virtual uint BaseOffset { get { return 1376; } }
 
         public bool IsAuthOpcode(uint opcode)
