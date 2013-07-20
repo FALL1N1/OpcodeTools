@@ -530,6 +530,47 @@ namespace OpcodeTools
         }
     }
 
+    public class Windows510 : FormulasBase
+    {
+        public override string ToString()
+        {
+            return "5.1.0.16357 Windows";
+        }
+
+        protected override uint BaseOffset { get { return 2388; } }
+        protected override uint BaseMultiplier { get { return 1; } }
+
+        protected override bool AuthCheck(uint opcode)
+        {
+            return (opcode & 0x97A) == 2090;
+        }
+
+        protected override bool SpecialCheck(uint opcode)
+        {
+            return (opcode & 0x12) == 16;
+        }
+
+        protected override bool NormalCheck(uint opcode)
+        {
+            return (opcode & 0x12) == 0;
+        }
+
+        public override uint CalcCryptedFromOpcode(uint opcode)
+        {
+            return opcode & 1 | ((opcode & 0xC | (opcode >> 1) & 0x7FF0) >> 1);
+        }
+
+        public override uint CalcSpecialFromOpcode(uint opcode)
+        {
+            return opcode & 1 | ((opcode & 0xC | (opcode >> 1) & 0x7FF0) >> 1);
+        }
+
+        public override uint CalcAuthFromOpcode(uint opcode)
+        {
+            return opcode & 1 | ((opcode & 4 | (((opcode & 0x80) | ((opcode & 0x600 | (opcode >> 1) & 0x7800) >> 1)) >> 4)) >> 1);
+        }
+    }
+
     public class Windows520 : FormulasBase
     {
         public override string ToString()

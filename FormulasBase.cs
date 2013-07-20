@@ -17,6 +17,7 @@ namespace OpcodeTools
         protected abstract bool AuthCheck(uint opcode);
         // offset in NetClient__ProcessMessage
         protected virtual uint BaseOffset { get { return 1376; } }
+        protected virtual uint BaseMultiplier { get { return 4; } }
 
         public bool IsAuthOpcode(uint opcode)
         {
