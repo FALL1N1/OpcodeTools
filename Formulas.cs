@@ -546,11 +546,7 @@ namespace OpcodeTools
 
         protected override bool SpecialCheck(uint opcode)
         {
-            return (opcode & 0x80A) == 0 &&
-                (opcode & 0xA58) != 2120 &&
-                (opcode & 0x248) != 520 &&
-                (opcode & 0x90A) != 2304 &&
-                (opcode & 0x90A) != 2048;
+            return (opcode & 0x80A) == 0;
         }
 
         protected override bool NormalCheck(uint opcode)
@@ -571,6 +567,46 @@ namespace OpcodeTools
         public override uint CalcAuthFromOpcode(uint opcode)
         {
             return ((opcode & 0x30 | (opcode >> 7) & 0x1C0) >> 1) | opcode & 7;
+        }
+    }
+
+    public class Windows530 : FormulasBase
+    {
+        public override string ToString()
+        {
+            return "5.3.0.17128 Windows";
+        }
+
+        protected override uint BaseOffset { get { return 1360; } }
+
+        protected override bool AuthCheck(uint opcode)
+        {
+            return (opcode & 0xCF6) == 32;
+        }
+
+        protected override bool SpecialCheck(uint opcode)
+        {
+            return (opcode & 0xA2) == 128;
+        }
+
+        protected override bool NormalCheck(uint opcode)
+        {
+            return (opcode & 0x224) == 36;
+        }
+
+        public override uint CalcCryptedFromOpcode(uint opcode)
+        {
+            return opcode & 3 | ((opcode & 0x18 | ((opcode & 0x1C0 | (opcode >> 1) & 0x7E00) >> 1)) >> 1);
+        }
+
+        public override uint CalcSpecialFromOpcode(uint opcode)
+        {
+            return opcode & 1 | ((opcode & 0x1C | ((opcode & 0x40 | (opcode >> 1) & 0x7F80) >> 1)) >> 1);
+        }
+
+        public override uint CalcAuthFromOpcode(uint opcode)
+        {
+            return opcode & 1 | ((opcode & 8 | ((opcode & 0x300 | (opcode >> 2) & 0x3C00) >> 4)) >> 2);
         }
     }
 }
