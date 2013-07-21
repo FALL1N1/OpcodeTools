@@ -37,7 +37,7 @@ namespace OpcodeTools
         public uint CalcOffsetFromOpcode(uint opcode)
         {
             uint crypted = CalcCryptedFromOpcode(opcode);
-            return (crypted * 4) + BaseOffset;
+            return (crypted * BaseMultiplier) + BaseOffset;
         }
 
         public uint CalcOpcodeFromSpecial(uint offset)
