@@ -17,7 +17,6 @@ namespace OpcodeTools
         protected abstract bool AuthCheck(uint opcode);
         // offset in NetClient__ProcessMessage
         protected virtual uint BaseOffset { get { return 1376; } }
-        protected virtual uint BaseMultiplier { get { return 4; } }
 
         public bool IsAuthOpcode(uint opcode)
         {
@@ -37,7 +36,7 @@ namespace OpcodeTools
         public uint CalcOffsetFromOpcode(uint opcode)
         {
             uint crypted = CalcCryptedFromOpcode(opcode);
-            return (crypted * BaseMultiplier) + BaseOffset;
+            return (crypted * 4) + BaseOffset;
         }
 
         public uint CalcOpcodeFromSpecial(uint offset)

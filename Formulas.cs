@@ -497,7 +497,7 @@ namespace OpcodeTools
             return "5.0.5.b.16135 Windows";
         }
 
-        protected override uint BaseOffset { get { return 340; } }
+        protected override uint BaseOffset { get { return 1360; } }
 
         protected override bool AuthCheck(uint opcode)
         {
@@ -537,8 +537,7 @@ namespace OpcodeTools
             return "5.1.0.16357 Windows";
         }
 
-        protected override uint BaseOffset { get { return 2388; } }
-        protected override uint BaseMultiplier { get { return 1; } }
+        protected override uint BaseOffset { get { return 1360; } }
 
         protected override bool AuthCheck(uint opcode)
         {
